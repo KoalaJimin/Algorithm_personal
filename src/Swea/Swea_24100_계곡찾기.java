@@ -30,7 +30,6 @@ public class Swea_24100_계곡찾기 {
 			for (int i = 1; i < len - 1; i++) {
 				for (int j = 1; j < len - 1; j++) {
 					int startNum = arr[i][j];
-					System.out.println(startNum);
 					for(int d = 0; d < 4; d++) {
 						//d방향으로 이동했을 경우의 좌표값 (nr, nc)
 						int nr = i + dr[d];

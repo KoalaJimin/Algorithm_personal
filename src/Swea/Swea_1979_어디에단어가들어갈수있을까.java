@@ -24,49 +24,33 @@ public class Swea_1979_어디에단어가들어갈수있을까 {
 			//가로, 세로 따로 봐야 돼 -> 가로 세로 따질 때 겹치는 건 신경 ㄴ
 			
 			//일단 가로 할게~
-			int count = 1; //1갯수 세기
 			int sum = 0; //총 몇 개 인지
 			for(int i = 0; i < N; i++) {
-				for(int j = 0; j < N - K + 1; j++) {
+				int count = 0; //1갯수 세기
+				for(int j = 0; j < N; j++) {
 					if(arr[i][j] == 1) {
-						int k;
-						for (k = 0; k < K-1; k++) {
-							if (arr[i][j+k+1] == 1) count++;
-							else break;
-						}
-						if(count == K) {
-							if (j+k == N-1) {
-								sum++;								
-							} else if (j+k != N-1 && j != 0 && arr[i][j+k+1] == 0 && arr[i][j-1] == 0) {
-								sum++;
-							}
-						}
+						count++;
+					} else {
+						if(count == K) sum++;
+						count = 0;
 					}
-					//초기화
-					count = 1;
 				}	
+				if (count == K) sum++; // 마지막에 끊겼을 때 체크
 			}	
 			
 			//세로~ 
-			for(int i = 0; i < N; i++) {
-				for(int j = 0; j < N - K + 1; j++) {
-					if(arr[j][i] == 1) {
-						int k;
-						for (k = 0; k < K-1; k++) {
-							if (arr[j+k+1][i] == 1) count++;
-							else break;
-						}
-						if(count == K) {
-							if (j+k == N-1) {
-								sum++;								
-							} else if (j+k != N-1 && j != 0 && arr[j+k+1][i] == 0 && arr[j-1][i] == 0) {
-								sum++;
-							}
-						}
-					}
-					count = 1;
-				}	
-			}	
+            for (int j = 0; j < N; j++) {
+                int count = 0;
+                for (int i = 0; i < N; i++) {
+                    if (arr[i][j] == 1) {
+                        count++;
+                    } else {
+                        if (count == K) sum++;
+                        count = 0;
+                    }
+                }
+                if (count == K) sum++; // 마지막에 끊겼을 때 체크
+            }
 			
 			//출력
 			System.out.println("#" + test_case + " " + sum);

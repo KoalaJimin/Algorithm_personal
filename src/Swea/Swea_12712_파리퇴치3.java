@@ -24,7 +24,6 @@ public class Swea_12712_파리퇴치3 {
         	//로직
         	int answer = 0;
         	
-
         	for(int i = 0; i < n; i++) {
             	for(int j = 0; j < n; j++) {
             		int sum = arr[i][j];

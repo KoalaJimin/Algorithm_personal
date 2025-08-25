@@ -2,7 +2,7 @@ package Baekjoon;
 
 import java.util.Scanner;
 
-public class B11866_요세푸스문제0 {
+public class B_11866_요세푸스문제0_다시풀어 {
 
 	public static void main(String[] args) {
 		//1번부터 N번까지 N명의 사람이 원을 이루면서 앉아있고, 

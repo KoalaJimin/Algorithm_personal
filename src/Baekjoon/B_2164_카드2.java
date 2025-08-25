@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Scanner;
 
-public class B2164_카드2 {
+public class B_2164_카드2 {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);

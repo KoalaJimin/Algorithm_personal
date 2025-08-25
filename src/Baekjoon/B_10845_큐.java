@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Scanner;
 
-public class B10845_큐 {
+public class B_10845_큐 {
 
 	public static void main(String[] args) {
 		Deque<Integer> q = new ArrayDeque<>();

@@ -3,7 +3,7 @@ package Baekjoon;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class B_1260_DFS와BFS {
+public class B_1260_DFS와BFS_다시 {
 
 	public static void main(String[] args) {
 		//방문할 수 있는 정점이 여러 개인 경우에는 

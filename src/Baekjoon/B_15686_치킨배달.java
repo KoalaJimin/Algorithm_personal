@@ -53,6 +53,7 @@ public class B_15686_치킨배달 {
 	// 조합 뽑기
 	static void pickChickenComb(int start, int depth) {
 	    if (depth == M) { 
+	    	
 	        // 선택된 치킨집 출력
 	        System.out.print("선택된 치킨집: ");
 	        for (int[] c : selected) {   // selected 안에는 int[]가 들어있음

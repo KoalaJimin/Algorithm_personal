@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class B_15686_치킨배달 {
-	static int N, M, pickChickenCount, n, r;
+	static int N, M, pickChickenCount, n, r, cityChickenDist, result;
 	static int[][] arr;
 	static List<int[]> house;
 	static List<int[]> chicken;
@@ -46,23 +46,21 @@ public class B_15686_치킨배달 {
 		if (chicken.size() > M) {
 			int n = chicken.size();
 			int r = M;
-			pickChickenComb(0 , 0); 
+			result = Integer.MAX_VALUE;
+			pickChickenComb(0, 0); 
+		} else {
+			result = calcChickenDist(chicken);
 		}
+		
+		//출력 
+		System.out.println(result);
 	}
 	
 	// 조합 뽑기
 	static void pickChickenComb(int start, int depth) {
-	    if (depth == M) { 
-	    	
-	        // 선택된 치킨집 출력
-	        System.out.print("선택된 치킨집: ");
-	        for (int[] c : selected) {   // selected 안에는 int[]가 들어있음
-	            System.out.print("(" + c[0] + "," + c[1] + ") ");
-	        }
-	        System.out.println();
-
-	        // M개 선택 완료 → 도시 치킨 거리 계산
-	        // calcChickenDist();
+	    if (depth == M) { 	    	
+	        // M개 선택 완료 → 도시 치킨 거리 계산	        
+	        result = Math.min(calcChickenDist(selected), result);
 	        return;
 	    }
 
@@ -72,10 +70,23 @@ public class B_15686_치킨배달 {
 	        selected.remove(selected.size() - 1);  // 백트래킹
 	    }
 	}
-
 	
-	static void calcChickenDist() {
+	//도시의 치킨 거리는 모든 집의 치킨 거리의 합이다.
+	static int calcChickenDist(List<int[]> targetChickenList) {
+		cityChickenDist = 0;
+		for (int[] target : house) {
+			int chickenDist = Integer.MAX_VALUE;
+			for (int[] chicken : targetChickenList) {
+				int r1 = target[0];
+	            int c1 = target[1];
+	            int r2 = chicken[0];
+	            int c2 = chicken[1];
+	            chickenDist = Math.min(chickenDist, Math.abs(r1 - r2) + Math.abs(c1 - c2)); // 한 집의 치킨 거리
+			}			
+			cityChickenDist += chickenDist;
+		}
 		
+		return cityChickenDist;
 	}
 
 }

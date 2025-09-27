@@ -29,7 +29,7 @@ public class B_10026_적록색약 {
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++) {
 				if(!visited[i][j]) {
-					dfs(i,j,grid[i][j], false); //정상인
+					dfs(i, j, grid[i][j], false); //정상인
 					normalCount++;
 				}
 			}

@@ -37,7 +37,7 @@ public class B_16929_TwoDots {
 		System.out.println(foundCycle ? "Yes" : "No");
 	}
 	
-	//fromX , fromY 현재좌표  /  depth 현재까지 이동한 칸 수 
+	//fromX , fromY 부모 좌표  /  depth 현재까지 이동한 칸 수 
 	private static void dfs(int x, int y, int fromX, int fromY, int depth) {
 		visited[x][y] = true; //방문처리 
 		
@@ -54,7 +54,7 @@ public class B_16929_TwoDots {
 				//같은 알파벳이고, 아직 방문하지 않았으면
 				dfs(nx, ny, x, y, depth+1);
 			} else {
-				//이미 방문했고(visited=true;) depth >= 4라면 사이클 발견
+				//이미 방문했고(visited==true), depth >= 4라면 사이클 발견
 				// depth가 4 이상 일 때 사이클 인 이유는 사이클이 만들어지려면 최소 4개의 점이 필요하기 때문 
 	            if (depth >= 4) {
 	                foundCycle = true;

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class B_15686_치킨배달 {
-	static int N, M, pickChickenCount, n, r, cityChickenDist, result;
+	static int N, M, n, r, cityChickenDist, result;
 	static int[][] arr;
 	static List<int[]> house;
 	static List<int[]> chicken;
@@ -16,7 +16,6 @@ public class B_15686_치킨배달 {
 		N = sc.nextInt();
 		M = sc.nextInt();		
 		arr = new int[N][N];
-		pickChickenCount = M;
 		house = new ArrayList<>();
 		chicken = new ArrayList<>();
 		selected = new ArrayList<>();
@@ -57,6 +56,7 @@ public class B_15686_치킨배달 {
 	}
 	
 	// 조합 뽑기
+	
 	static void pickChickenComb(int start, int depth) {
 	    if (depth == M) { 	    	
 	        // M개 선택 완료 → 도시 치킨 거리 계산	        
@@ -65,8 +65,8 @@ public class B_15686_치킨배달 {
 	    }
 
 	    for (int i = start; i < chicken.size(); i++) {
-	        selected.add(chicken.get(i));       // i번째 치킨집 선택
-	        pickChickenComb(i + 1, depth + 1);  // 다음 조합 뽑기
+	        selected.add(chicken.get(i));          // i번째 치킨집 선택
+	        pickChickenComb(i + 1, depth + 1);     // 다음 조합 뽑기
 	        selected.remove(selected.size() - 1);  // 백트래킹
 	    }
 	}

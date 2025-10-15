@@ -25,16 +25,16 @@ public class B_19238_스타트택시 {
 		m = sc.nextInt();
 		gas = sc.nextInt();
 		
-		map = new int[n][m];
+		map = new int[n][n];
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
+			for (int j = 0; j < n; j++) {
 				map[i][j] = sc.nextInt();
 			}
 		}
 		
 		//처음 출발지점
-		startX = sc.nextInt();
-		startY = sc.nextInt();
+		startX = sc.nextInt() - 1;
+		startY = sc.nextInt() - 1;
 		
 		person = new ArrayList<>();
 		arrive = new ArrayList<>();
@@ -43,66 +43,105 @@ public class B_19238_스타트택시 {
 			arrive.add(new int[] {sc.nextInt() - 1, sc.nextInt() - 1});
 		}
 		
-		//출발지점부터 가까운 사람 먼저 찾기 - 최단거리 
-		List<Integer> li = new ArrayList<>();
-		for (int i = 0; i < m; i++) {
-			li.add(bfs(startX, startY, arrive.get(i)[0], arrive.get(i)[1]));
-		}		
-		int closePerson = Collections.min(li);
-		int closePersonIndex = li.indexOf(closePerson);		
-		
-		//그 사람에게 (출발지로) 이동 
-		startX = person.get(closePersonIndex)[0];
-		startY = person.get(closePersonIndex)[1];
-		gas -= closePerson;
-		gas += closePerson * 2;
-		
-		//그 사람의 (목적지로) 이동 -> 거리 계산 후 연료 차감 & 이동한 거리의 두 배 연료 충전
-		int nowGas = bfs(startX, startY, arrive.get(closePersonIndex)[0], arrive.get(closePersonIndex)[1]);
-		//조건) 이동 중에 연료 부족 시 -> 이동 중단 후 -1 출력  
-		if (nowGas >= gas) System.out.println(-1);
-		else {
-			gas -= nowGas;
-			gas += nowGas * 2;
-		}	
-		//출발지점 바꾸기
-		startX = arrive.get(closePersonIndex)[0];
-		startY = arrive.get(closePersonIndex)[1];
+		boolean[] served = new boolean[m];		
+        // 모든 승객 처리
+        for (int servedCnt = 0; servedCnt < m; servedCnt++) {
+        	// 출발지점부터 가까운 사람 먼저 찾기 - 최단거리 (리스트 방식 유지)
+        	List<Integer> li = new ArrayList<>();
+        	for (int i = 0; i < m; i++) {
+        		// 이미 태운 승객이면 후보에서 제외
+        	    if (served[i]) {               
+        	        li.add(Integer.MAX_VALUE);
+        	        continue;
+        	    }
+        	    
+        	    // 여기서는 모든 승객이 아직 안 태워졌다는 전제 하에 작성
+        	    int pr = person.get(i)[0];
+        	    int pc = person.get(i)[1];
+        	    int d = bfs(startX, startY, pr, pc); // 출발 -> 사람 위치 거리
+        	    if (d == -1) li.add(Integer.MAX_VALUE); // 도달 불가 표시
+        	    else li.add(d);
+        	}
 
-		
+        	// 가장 가까운 거리 값
+        	int minDist = Collections.min(li);
+        	if (minDist == Integer.MAX_VALUE) {
+        	    System.out.println(-1); // 갈 수 있는 승객이 없음
+        	    return;
+        	}
+
+        	// 같은 거리 여러명일 때 행,열 작은 순으로 선택
+        	int closePersonIndex = -1;
+        	int bestR = Integer.MAX_VALUE, bestC = Integer.MAX_VALUE;
+        	for (int i = 0; i < m; i++) {
+        	    if (li.get(i) != minDist) continue;
+        	    int pr = person.get(i)[0];
+        	    int pc = person.get(i)[1];
+        	    if (pr < bestR || (pr == bestR && pc < bestC)) {
+        	        bestR = pr;
+        	        bestC = pc;
+        	        closePersonIndex = i;
+        	    }
+        	}
+
+        	// 연료 체크: 승객까지 가는 데 연료 부족하면 실패
+        	if (minDist > gas) {
+        	    System.out.println(-1);
+        	    return;
+        	}
+
+        	// 승객까지 이동
+        	gas -= minDist;
+        	startX = person.get(closePersonIndex)[0];
+        	startY = person.get(closePersonIndex)[1];
+
+        	// 목적지까지 거리 계산
+        	int need = bfs(startX, startY, arrive.get(closePersonIndex)[0], arrive.get(closePersonIndex)[1]);
+        	if (need == -1 || need > gas) {
+        	    System.out.println(-1);
+        	    return;
+        	}
+
+        	// 목적지 이동: 연료 차감 후 보상
+        	gas -= need;
+        	gas += need * 2;
+
+        	// 택시 위치 갱신
+        	startX = arrive.get(closePersonIndex)[0];
+        	startY = arrive.get(closePersonIndex)[1];
+
+        	// 한 명 처리했으니 served[closePersonIndex] = true; 로 표시해서 다음 반복에서 같은 사람을 다시 뽑지 않도록
+        	served[closePersonIndex] = true;
+        }
+
+        // 모두 처리 성공
+        System.out.println(gas);		
 	}
-	
-//	private static void findClosePerson() {
-//		List<Integer> li = new ArrayList<>();
-//		for (int i = 0; i < m; i++) {
-//			li.add(bfs(startX, startY, arrive.get(i)[0], arrive.get(i)[1]));
-//		}		
-//		int closePerson = Collections.min(li);
-//		int closePersonIndex = li.indexOf(closePerson);		
-//	}
 
 	private static int bfs(int x, int y, int arriveX, int arriveY) {
-		visited = new boolean[n][m];
-		dist = new int[n][m];
+		visited = new boolean[n][n];
+		dist = new int[n][n];
 		
 		Deque<int[]> q = new ArrayDeque<>();
 		q.add(new int[] {x,y});
 		visited[x][y] = true;
+		dist[x][y] = 0;
 		
 		while(!q.isEmpty()) {
 			int[] cur = q.poll();
 			int r = cur[0];
 			int c = cur[1];
 			
+			// 도달
 			if (r == arriveX && c == arriveY) {
 				return dist[r][c];
 			}
 			
 			for (int h = 0; h < 4; h++) {
 				int nx = r + dx[h];
-				int ny = r + dx[h];
+				int ny = c + dy[h];
 				
-				if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+				if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
 				if (visited[nx][ny] || map[nx][ny] == 1) continue;
 				
 				visited[nx][ny] = true;
@@ -111,8 +150,7 @@ public class B_19238_스타트택시 {
 			}
 		}
 		
-		return dist[x][y];
+		return -1; //도달 불가
 	}
 
 }
-
